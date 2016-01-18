@@ -2,7 +2,7 @@ defmodule Ruff.UserSocket do
   use Phoenix.Socket
 
   ## Channels
-  # channel "rooms:*", Ruff.RoomChannel
+  channel "rooms:*", Ruff.RoomChannel
 
   ## Transports
   transport :websocket, Phoenix.Transports.WebSocket

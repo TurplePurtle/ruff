@@ -1,0 +1,4 @@
+<h2>Chat</h2>
+
+<div id="messages"></div>
+<input id="chat-input" type="text" style="background-color:white; width:100%;">
