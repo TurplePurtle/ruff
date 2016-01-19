@@ -18,7 +18,7 @@
           <ul class="nav nav-pills pull-right">
             <%= if @current_user do %>
               <li><%= link @current_user.username, to: "/" %></li>
-              <li><%= link "Log out", to: session_path(@conn, :delete), method: :delete %></li>
+              <li><%= button "Log out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-link" %></li>
             <% else %>
               <li><%= link "Sign up", to: registration_path(@conn, :new) %></li>
               <li><%= link "Log in", to: session_path(@conn, :new) %></li>
