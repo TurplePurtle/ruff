@@ -7,6 +7,7 @@ defmodule Ruff.Router do
     plug :fetch_flash
     plug :protect_from_forgery
     plug :put_secure_browser_headers
+    plug Ruff.Plugs.CurrentUser
   end
 
   pipeline :api do
@@ -18,6 +19,9 @@ defmodule Ruff.Router do
 
     get "/", PageController, :index
     get "/chat", PageController, :chat
+    resources "/signup", RegistrationController, only: [:new, :create]
+    resources "/login", SessionController, only: [:new, :create]
+    delete "/login", SessionController, :delete
   end
 
   # Other scopes may use custom stacks.

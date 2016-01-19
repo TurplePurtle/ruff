@@ -1,0 +1,3 @@
+<h2>Log in</h2>
+
+<%= render Ruff.SessionView, "form.html", assigns %>
