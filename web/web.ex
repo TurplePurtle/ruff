@@ -58,6 +58,8 @@ defmodule Ruff.Web do
   def router do
     quote do
       use Phoenix.Router
+
+      import Ruff.Plugs
     end
   end
 
