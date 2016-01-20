@@ -30,14 +30,17 @@ defmodule Ruff.Mixfile do
   #
   # Type `mix help deps` for examples and options.
   defp deps do
-    [{:phoenix, "~> 1.1.2"},
-     {:phoenix_ecto, "~> 2.0"},
-     {:postgrex, ">= 0.0.0"},
-     {:phoenix_html, "~> 2.3"},
-     {:phoenix_live_reload, "~> 1.0", only: :dev},
-     {:gettext, "~> 0.9"},
-     {:comeonin, "~> 2.0.1"},
-     {:cowboy, "~> 1.0"}]
+    [
+      {:comeonin, "~> 2.0.1"},
+      {:cowboy, "~> 1.0"},
+      {:gettext, "~> 0.9"},
+      {:monocle, git: "git://github.com/TurplePurtle/monocle.git"},
+      {:phoenix, "~> 1.1.2"},
+      {:phoenix_ecto, "~> 2.0"},
+      {:phoenix_html, "~> 2.3"},
+      {:phoenix_live_reload, "~> 1.0", only: :dev},
+      {:postgrex, ">= 0.0.0"},
+     ]
   end
 
   # Aliases are shortcut or tasks specific to the current project.

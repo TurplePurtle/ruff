@@ -2,11 +2,13 @@ defmodule Ruff.Plugs do
   import Plug.Conn
   alias Ruff.Repo
   alias Ruff.User
+  alias Monocle.Maybe
 
   def current_user(conn, _) do
-    case get_session(conn, :current_user) do
-      nil -> conn |> assign(:current_user, nil)
-      id  -> conn |> assign(:current_user, Repo.get(User, id))
-    end
+    user =
+      Maybe.from_nil(get_session(conn, :current_user))
+      |> Maybe.map(&Repo.get(User, &1))
+      |> Maybe.get()
+    assign(conn, :current_user, user)
   end
 end
