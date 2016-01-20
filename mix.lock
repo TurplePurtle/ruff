@@ -6,7 +6,7 @@
   "ecto": {:hex, :ecto, "1.1.1"},
   "fs": {:hex, :fs, "0.9.2"},
   "gettext": {:hex, :gettext, "0.9.0"},
-  "monocle": {:git, "git://github.com/TurplePurtle/monocle.git", "f8dafd87a8c8de6b8301b17fd8ff3168155cd3c8", []},
+  "monocle": {:git, "git://github.com/TurplePurtle/monocle.git", "cbe07bf53b2f51daf19590793d52dee9fe5dfac5", []},
   "phoenix": {:hex, :phoenix, "1.1.2"},
   "phoenix_ecto": {:hex, :phoenix_ecto, "2.0.0"},
   "phoenix_html": {:hex, :phoenix_html, "2.3.1"},
