@@ -1,2 +1,5 @@
 <%= render Ruff.PageView, "video_box.html", assigns %>
 <%= render Ruff.PageView, "chat_box.html", assigns %>
+<%= if assigns.current_user do %>
+<script>window.userToken = "<%= Phoenix.Token.sign @conn, "user_id", assigns.current_user.id %>"</script>
+<% end %>

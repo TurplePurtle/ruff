@@ -1,5 +1,7 @@
 import socket from "./socket";
 
+window.socket = socket;
+
 function timestamp() {
   var date = new Date();
   return date.toLocaleTimeString();
@@ -18,13 +20,21 @@ function initChat() {
 
   chatForm.addEventListener("submit", e => {
     e.preventDefault();
+
+    if (!socket.params.token) {
+      if (confirm("Sign up is required to send messages. Sign up now?")) {
+        location.href = "/signup";
+      }
+      return;
+    }
+
     channel.push("new_msg", { body: chatInput.value });
     chatInput.value = "";
   });
 
   channel.on("new_msg", payload => {
     var message = document.createElement("div");
-    message.textContent = `${timestamp()} - ${payload.body}`;
+    message.textContent = `${timestamp()} - ${payload.username}: ${payload.body}`;
     chatMessages.insertBefore(message, chatMessages.firstChild);
   });
 

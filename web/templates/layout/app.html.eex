@@ -8,9 +8,7 @@
     <meta name="author" content="">
 
     <title>Ruff!</title>
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/normalize.css") %>">
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
-    <link rel="stylesheet" href="<%= static_path(@conn, "/css/chat.css") %>">
   </head>
 
   <body>

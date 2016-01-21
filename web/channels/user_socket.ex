@@ -19,8 +19,12 @@ defmodule Ruff.UserSocket do
   #
   # See `Phoenix.Token` documentation for examples in
   # performing token verification on connect.
-  def connect(_params, socket) do
-    {:ok, socket}
+  def connect(params, socket) do
+    user = case Phoenix.Token.verify(socket, "user_id", params["token"]) do
+      {:ok, id} -> Ruff.Repo.get_by(Ruff.User, id: id)
+      {:error, _} -> nil
+    end
+    {:ok, socket |> assign(:user, user)}
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
