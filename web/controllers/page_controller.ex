@@ -5,7 +5,7 @@ defmodule Ruff.PageController do
     dest = if conn.assigns.current_user do
       page_path(conn, :chat)
     else
-      session_path(conn, :new)
+      registration_path(conn, :new)
     end
     redirect(conn, to: dest)
   end

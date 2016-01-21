@@ -14,7 +14,6 @@ defmodule Ruff.RegistrationController do
       {:ok, user} ->
         conn
         |> put_session(:current_user, user.id)
-        |> put_flash(:info, "Your account was created")
         |> redirect(to: "/")
       {:error, changeset} ->
         conn
