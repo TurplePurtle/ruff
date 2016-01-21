@@ -7,29 +7,30 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Hello Ruff!</title>
+    <title>Ruff!</title>
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/normalize.css") %>">
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <link rel="stylesheet" href="<%= static_path(@conn, "/css/chat.css") %>">
   </head>
 
   <body>
     <div class="container">
       <header class="header">
-        <nav role="navigation">
-          <ul class="nav nav-pills pull-right">
-            <%= if @current_user do %>
-              <li><%= link @current_user.username, to: "/" %></li>
-              <li><%= button "Log out", to: session_path(@conn, :delete), method: :delete, class: "btn btn-link" %></li>
-            <% else %>
-              <li><%= link "Sign up", to: registration_path(@conn, :new) %></li>
-              <li><%= link "Log in", to: session_path(@conn, :new) %></li>
-            <% end %>
-          </ul>
+        <nav class="top-nav" role="navigation">
+          <%= if @current_user do %>
+            <%= link @current_user.username, to: "/", class: "nav-link" %>
+            <%= button "Log out", to: session_path(@conn, :delete), method: :delete, class: "nav-link" %>
+          <% else %>
+            <%= link "Sign up", to: registration_path(@conn, :new), class: "nav-link" %>
+            <%= link "Log in", to: session_path(@conn, :new), class: "nav-link" %>
+          <% end %>
         </nav>
-        <span class="logo"></span>
       </header>
 
-      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      <div class="row">
+        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+      </div>
 
       <main role="main">
         <%= render @view_module, @view_template, assigns %>

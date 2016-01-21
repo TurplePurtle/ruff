@@ -1,0 +1,7 @@
+<div id="chat-box">
+  <form id="chat-form">
+    <input id="chat-input" type="text">
+    <button id="chat-send">Send</button>
+  </form>
+  <div id="chat-messages"></div>
+</div>

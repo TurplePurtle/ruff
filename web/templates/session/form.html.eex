@@ -10,21 +10,15 @@
     </div>
   <% end %>
 
-  <div class="form-group">
-    <label>
-      Username
-      <%= text_input f, :username, class: "form-control" %>
-    </label>
-  </div>
+  <label class="text-input">
+    Username
+    <%= text_input f, :username %>
+  </label>
 
-  <div class="form-group">
-    <label>
-      Password
-      <%= password_input f, :password, class: "form-control" %>
-    </label>
-  </div>
+  <label class="text-input">
+    Password
+    <%= password_input f, :password %>
+  </label>
 
-  <div class="form-group">
-    <%= submit "Log in", class: "btn btn-primary" %>
-  </div>
+  <%= submit "Log in" %>
 <% end %>

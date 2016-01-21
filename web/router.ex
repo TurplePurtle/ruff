@@ -19,8 +19,10 @@ defmodule Ruff.Router do
 
     get "/", PageController, :index
     get "/chat", PageController, :chat
-    resources "/signup", RegistrationController, only: [:new, :create]
-    resources "/login", SessionController, only: [:new, :create]
+    get "/signup", RegistrationController, :new
+    post "/signup", RegistrationController, :create
+    get "/login", SessionController, :new
+    post "/login", SessionController, :create
     delete "/login", SessionController, :delete
   end
 
