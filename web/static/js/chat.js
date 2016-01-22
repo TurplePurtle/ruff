@@ -1,4 +1,5 @@
 import socket from "./socket";
+import channel from "./lobby-channel";
 
 window.socket = socket;
 
@@ -16,10 +17,10 @@ function initChat() {
     return null;
   }
 
-  let channel = socket.channel("rooms:lobby", {});
-
   chatForm.addEventListener("submit", e => {
     e.preventDefault();
+
+    if (!chatInput.value) return;
 
     if (!socket.params.token) {
       if (confirm("Sign up is required to send messages. Sign up now?")) {
@@ -37,11 +38,6 @@ function initChat() {
     message.textContent = `${timestamp()} - ${payload.username}: ${payload.body}`;
     chatMessages.insertBefore(message, chatMessages.firstChild);
   });
-
-  socket.connect();
-  channel.join()
-    .receive("ok", resp => { console.log("Joined successfully", resp); })
-    .receive("error", resp => { console.log("Unable to join", resp); });
 
   return {};
 }

@@ -17,10 +17,6 @@
   flex: 1;
 }
 
-#chat-send {
-  flex: 0;
-}
-
 #chat-messages,
 #chat-input,
 #chat-send {

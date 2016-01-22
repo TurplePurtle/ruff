@@ -1,1 +1,7 @@
-video would go here!
+<div id="video-box">
+  <div id="video-player"></div>
+  <form id="video-form">
+    <input id="video-input" type="text" placeholder="YouTube URL">
+    <button id="video-send">Play</button>
+  </form>
+</div>

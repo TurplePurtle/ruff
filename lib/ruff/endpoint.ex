@@ -33,7 +33,8 @@ defmodule Ruff.Endpoint do
   plug Plug.Session,
     store: :cookie,
     key: "_ruff_key",
-    signing_salt: "KZ/nYAWH"
+    signing_salt: "KZ/nYAWH",
+    max_age: 604800
 
   plug Ruff.Router
 end
