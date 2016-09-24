@@ -62,7 +62,7 @@ function initVideoBox() {
         break;
       case "paused":
         if (expected[state] > 0) { expected[state]--; break; }
-        channel.push("video_state", { state: "paused" });
+        channel.push("video_state", { state: "paused", time: e.target.getCurrentTime() });
         break;
       case "playing":
         if (expected[state] > 0) { expected[state]--; break; }
@@ -87,7 +87,8 @@ function initVideoBox() {
         break;
       case "playing":
         expected[state] = (expected[state]||0) + 1;
-        vc.seek(payload.time)
+        vc.seek(payload.time);
+        vc.play();
         break;
       }
     });
