@@ -1,11 +1,11 @@
-class VC {
+class VideoController {
   constructor(player) {
     this.player = player;
     this.onStateChange = null;
 
     player.addEventListener("onStateChange", e => {
       if (typeof this.onStateChange === "function") {
-        const state = VC.youTubeStateToString[e.data];
+        const state = VideoController.youTubeStateToString[e.data];
         this.onStateChange({
           data: state,
           target: this,
@@ -15,17 +15,29 @@ class VC {
   }
 
   static getYouTubeId(url) {
-    const match = url.match(VC.youTubeIdRegex);
-    return match ? match[1] : null;
+    const a = document.createElement('a');
+    a.href = url;
+    if (/youtube\.com$/.test(a.hostname)) {
+      const params = a.search.slice(1).split('&').reduce((params, x) => {
+        const [name, value] = x.split('=');
+        params[name] = value;
+        return params;
+      }, {});
+      return params.v;
+    } else if (/youtu\.be$/.test(a.hostname)) {
+      return a.pathname.slice(1);
+    } else {
+      return '';
+    }
   }
 
   load(url, time) {
-    this.player.loadVideoById(VC.getYouTubeId(url), time);
+    this.player.loadVideoById(VideoController.getYouTubeId(url), time);
     return this;
   }
 
   cue(url, time) {
-    this.player.cueVideoById(VC.getYouTubeId(url), time);
+    this.player.cueVideoById(VideoController.getYouTubeId(url), time);
     return this;
   }
 
@@ -58,9 +70,7 @@ class VC {
   }
 }
 
-VC.youTubeIdRegex = /^.*(?:youtu\.be\/|v\/|u\/\w\/|embed\/|watch\?v=|\&v=)([^#\&\?]*).*/i;
-
-VC.youTubeStateToString = {
+VideoController.youTubeStateToString = {
   "-1": "loading",
   "0": "ended",
   "1": "playing",
@@ -69,4 +79,4 @@ VC.youTubeStateToString = {
   "5": "cued",
 };
 
-export default VC;
+export default VideoController;
