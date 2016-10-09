@@ -11,7 +11,8 @@
     <div class="users-box">
       <button @click="takeLeader()">Take leader</button>
       <div>
-        <div class="users-user" v-for="(user, key) in users" :style="!user && 'color: rgba(0,0,0,0.5)'">
+        <div class="users-user" v-for="(user, key) in users" :key="key"
+            :style="!user && 'color: rgba(0,0,0,0.5)'">
           {{user ? user.username : "Anonymous"}}
           <span class="users-user-leader" v-if="key === leader">(leader)</span>
         </div>
@@ -22,7 +23,7 @@
   <div class="container row">
     <div class="chat-box">
       <div class="chat-messages">
-        <div v-for="message in chatMessages">
+        <div v-for="message in chatMessages" :key="message.id">
           <span :title="message.timestamp">{{message.username}}: {{message.body}}</span>
         </div>
       </div>

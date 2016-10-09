@@ -31,6 +31,7 @@ function initChat() {
 
   channel.on("new_msg", payload => {
     app.chatMessages.push({
+      id: Math.random(),
       timestamp: new Date().toLocaleString(),
       username: payload.username,
       body: payload.body,
