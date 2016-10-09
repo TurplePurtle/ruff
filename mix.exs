@@ -31,7 +31,7 @@ defmodule Ruff.Mixfile do
   # Type `mix help deps` for examples and options.
   defp deps do
     [
-      {:comeonin, "~> 2.0.1"},
+      {:comeonin, "~> 2.0"},
       {:cowboy, "~> 1.0"},
       {:gettext, "~> 0.9"},
       {:monocle, git: "git://github.com/TurplePurtle/monocle.git"},

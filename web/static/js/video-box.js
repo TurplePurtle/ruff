@@ -32,13 +32,13 @@ function initVideoBox() {
     };
 
     const outgoingStateHandlers = {
-      unstarted: ({data: state, target: video}) => {
+      unstarted: ({target: video}) => {
         channel.push("video_state", { state: "unstarted", url: video.getUrl() });
       },
-      paused: ({data: state, target: video}) => {
+      paused: ({target: video}) => {
         channel.push("video_state", { state: "paused", time: video.getCurrentTime() });
       },
-      playing: ({data: state, target: video}) => {
+      playing: ({target: video}) => {
         channel.push("video_state", { state: "playing", time: video.getCurrentTime() });
       },
     };
