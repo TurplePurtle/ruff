@@ -18,10 +18,10 @@ defmodule Ruff.User do
   If no params are provided, an invalid changeset is returned
   with no validation performed.
   """
-  def changeset(model, params \\ :empty) do
+  def changeset(model, params \\ %{}) do
     model
     |> cast(params, @required_fields, @optional_fields)
-    |> unique_constraint(:username)
+    |> unique_constraint(:username, name: :users_lower_username_index)
     |> validate_format(:username, ~r/^[A-Za-z0-9_\-]{3,}$/)
     |> validate_length(:password, min: 6)
   end

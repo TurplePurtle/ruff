@@ -21,10 +21,12 @@ defmodule Ruff.UserSocket do
   # performing token verification on connect.
   def connect(params, socket) do
     user = case Phoenix.Token.verify(socket, "user_id", params["token"]) do
-      {:ok, id} -> Ruff.Repo.get_by(Ruff.User, id: id)
+      {:ok, id} -> get_user(id)
       {:error, _} -> nil
     end
-    {:ok, socket |> assign(:user, user)}
+    client_id = :crypto.strong_rand_bytes(8) |> Base.url_encode64
+    socket = socket |> assign(:user, user) |> assign(:client_id, client_id)
+    {:ok, socket}
   end
 
   # Socket id's are topics that allow you to identify all sockets for a given user:
@@ -37,5 +39,9 @@ defmodule Ruff.UserSocket do
   #     Ruff.Endpoint.broadcast("users_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
-  def id(_socket), do: nil
+  def id(socket), do: "user_sock:#{socket.assigns.user.id}"
+
+  defp get_user(id) do
+    Ruff.Repo.get_by(Ruff.User, id: id) |> Map.take([:id, :username])
+  end
 end

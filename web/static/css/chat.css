@@ -1,25 +1,25 @@
-#chat-box {
+.chat-box {
   background-color: #fff;
 }
 
-#chat-messages {
+.chat-messages {
   height: 20rem;
   overflow: auto;
   width: 100%;
 }
 
-#chat-form {
+.chat-form {
   display: flex;
   width: 100%;
 }
 
-#chat-input {
+.chat-input {
   flex: 1;
 }
 
-#chat-messages,
-#chat-input,
-#chat-send {
+.chat-messages,
+.chat-input,
+.chat-send {
   background-color: transparent;
   border: 1px solid #ccc;
 }

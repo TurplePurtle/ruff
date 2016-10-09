@@ -9,32 +9,27 @@
 
     <title>Ruff!</title>
     <link rel="stylesheet" href="<%= static_path(@conn, "/css/app.css") %>">
+    <script src="//unpkg.com/vue@2.0.1/dist/vue.js"></script>
   </head>
 
   <body>
-    <div class="container">
-      <header class="header">
-        <nav class="top-nav" role="navigation">
-          <%= if @current_user do %>
-            <%= link @current_user.username, to: "/", class: "nav-link" %>
-            <%= button "Log out", to: session_path(@conn, :delete), method: :delete, class: "nav-link" %>
-          <% else %>
-            <%= link "Sign up", to: registration_path(@conn, :new), class: "nav-link" %>
-            <%= link "Log in", to: session_path(@conn, :new), class: "nav-link" %>
-          <% end %>
-        </nav>
-      </header>
+    <nav class="top-nav" role="navigation">
+      <%= if @current_user do %>
+        <%= link @current_user.username, to: "/", class: "nav-link" %>
+        <%= button "Log out", to: session_path(@conn, :delete), method: :delete, class: "nav-link" %>
+      <% else %>
+        <%= link "Sign up", to: registration_path(@conn, :new), class: "nav-link" %>
+        <%= link "Log in", to: session_path(@conn, :new), class: "nav-link" %>
+      <% end %>
+    </nav>
 
-      <div class="row">
-        <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
-        <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
-      </div>
+    <div class="row">
+      <p class="alert alert-info" role="alert"><%= get_flash(@conn, :info) %></p>
+      <p class="alert alert-danger" role="alert"><%= get_flash(@conn, :error) %></p>
+    </div>
 
-      <main role="main">
-        <%= render @view_module, @view_template, assigns %>
-      </main>
+    <%= render @view_module, @view_template, assigns %>
 
-    </div> <!-- /container -->
     <script src="<%= static_path(@conn, "/js/app.js") %>"></script>
   </body>
 </html>

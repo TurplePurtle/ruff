@@ -1,18 +1,18 @@
-#video-box {
+.video-box {
   background-color: #aaa;
 }
 
-#video-form {
+.video-form {
   display: flex;
   width: 100%;
 }
 
-#video-input {
+.video-input {
   flex: 1;
 }
 
-#video-input,
-#video-send {
+.video-input,
+.video-send {
   background-color: transparent;
   border: 1px solid #ccc;
 }

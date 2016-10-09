@@ -5,10 +5,12 @@
 # is restricted to this project.
 use Mix.Config
 
+# Configure the repos
+config :ruff, ecto_repos: [Ruff.Repo]
+
 # Configures the endpoint
 config :ruff, Ruff.Endpoint,
   url: [host: "localhost"],
-  root: Path.dirname(__DIR__),
   secret_key_base: "AGiFPpCzDPgPf5vwbN7QIaz5xqXQ69ietZTuQ0e+KsvKZx1jVksCXYQNE1ZXhL2Y",
   render_errors: [accepts: ~w(html json)],
   pubsub: [name: Ruff.PubSub,

@@ -1,17 +1,14 @@
-class VideoController {
-  constructor(player) {
-    this.player = player;
-    this.onStateChange = null;
+import ytApi from "./youtube-api";
 
-    player.addEventListener("onStateChange", e => {
-      if (typeof this.onStateChange === "function") {
-        const state = VideoController.youTubeStateToString[e.data];
-        this.onStateChange({
-          data: state,
-          target: this,
-        });
-      }
-    });
+class VideoController {
+  constructor(videoPlayer, width = 640, height = Math.ceil(9/16*width)) {
+    this.player = null;
+    this.onStateChange = null;
+    this.apiReady = ytApi.load();
+    this.playerReady = this.initPlayer(videoPlayer, width, height);
+    this.ready = this.playerReady.then(() => this);
+
+    this.addPlayerEventListener();
   }
 
   static getYouTubeId(url) {
@@ -29,6 +26,34 @@ class VideoController {
     } else {
       return '';
     }
+  }
+
+  addPlayerEventListener() {
+    this.playerReady.then(player => {
+      player.addEventListener("onStateChange", e => {
+        if (typeof this.onStateChange === "function") {
+          const state = VideoController.youTubeStateToString[e.data];
+          this.onStateChange({ data: state, target: this });
+        }
+      })
+    });
+  }
+
+  initPlayer(videoPlayer, width, height) {
+    return this.apiReady.then(YT => {
+      return new Promise((ok, err) => {
+        new YT.Player(videoPlayer, {
+          width: width,
+          height: height,
+          events: {
+            onReady: ok,
+            onError: err,
+          },
+        });
+      });
+    }).then(playerReadyEvent => {
+      return this.player = playerReadyEvent.target;
+    });
   }
 
   load(url, time) {
@@ -71,7 +96,7 @@ class VideoController {
 }
 
 VideoController.youTubeStateToString = {
-  "-1": "loading",
+  "-1": "unstarted",
   "0": "ended",
   "1": "playing",
   "2": "paused",

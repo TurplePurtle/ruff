@@ -1,9 +1,9 @@
-import socket from "./socket"
-import channel from "./lobby-channel"
-import chat from "./chat"
-import video from "./video"
+import socket from "./socket";
+import channel from "./lobby-channel";
+import chat from "./chat";
+import videoBox from "./video-box";
 
-video.then(() => {
+videoBox.then(() => {
   socket.connect();
   channel.join()
     .receive("ok", resp => { console.log("Joined successfully", resp); })

@@ -1,0 +1,3 @@
+stylus --include-css -I web/static/css/ web/static/css/app.css -o priv/static/css/
+webpack -p
+mix phoenix.digest

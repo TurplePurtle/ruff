@@ -8,7 +8,7 @@ defmodule Ruff.Repo.Migrations.CreateUser do
 
       timestamps
     end
-    create unique_index(:users, [:username])
+    create unique_index(:users, ["lower(username)"], name: :users_lower_username_index)
 
   end
 end

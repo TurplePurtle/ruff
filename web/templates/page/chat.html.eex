@@ -1,5 +1,37 @@
-<%= render Ruff.PageView, "video_box.html", assigns %>
-<%= render Ruff.PageView, "chat_box.html", assigns %>
+<main role="main" id="app">
+  <div class="layout-row">
+    <div class="video-box">
+      <div id="video-player" class="video-player"></div>
+      <form id="video-form" class="video-form">
+        <input type="text" id="video-input" class="video-input" placeholder="YouTube URL">
+        <button class="video-send">Play</button>
+      </form>
+    </div>
+
+    <div class="users-box">
+      <button @click="takeLeader()">Take leader</button>
+      <div>
+        <div v-for="(user, key) in users">
+          {{user.username}}
+          <span v-if="key === leader">(leader)</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="chat-box">
+    <div class="chat-messages">
+      <div v-for="message in chatMessages">
+        <span :title="message.timestamp">{{message.username}}: {{message.body}}</span>
+      </div>
+    </div>
+    <form class="chat-form" @submit.prevent="sendChatMessage">
+      <input class="chat-input" type="text" placeholder="Type a message..." v-model="chatMessage">
+      <button class="chat-send">Send</button>
+    </form>
+  </div>
+</main>
+
 <%= if assigns.current_user do %>
 <script>
 window.userToken = "<%= Phoenix.Token.sign @conn, "user_id", assigns.current_user.id %>";

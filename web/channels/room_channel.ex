@@ -1,9 +1,15 @@
 defmodule Ruff.RoomChannel do
   use Phoenix.Channel
+  alias Ruff.ChannelMonitor, as: CM
 
-  # Join
+  #
+  # Join a room
+  #
 
   def join("rooms:lobby", _message, socket) do
+    key = "#{socket.assigns.user.id}:#{socket.assigns.client_id}"
+    channel_state = CM.add_user("lobby", key, socket.assigns.user)
+    send self, {:after_join, channel_state}
     {:ok, socket}
   end
 
@@ -11,8 +17,22 @@ defmodule Ruff.RoomChannel do
     {:error, %{reason: "unauthorized"}}
   end
 
-  # Handle in
+  #
+  # Disconnecting
+  #
 
+  def terminate(_reason, socket) do
+    key = "#{socket.assigns.user.id}:#{socket.assigns.client_id}"
+    channel_state = CM.remove_user("lobby", key)
+    broadcast! socket, "channel_update", channel_state
+    :ok
+  end
+
+  #
+  # Handle incoming messages
+  #
+
+  # chat messages
   def handle_in("new_msg", %{"body" => body}, %{assigns: %{user: user}} = socket)
   when user != nil do
     msg = %{body: body} |> set_user_fields(user)
@@ -20,23 +40,53 @@ defmodule Ruff.RoomChannel do
     {:noreply, socket}
   end
 
-  def handle_in("video_state", payload, %{assigns: %{user: user}} = socket)
+  # video messages
+  def handle_in("video_state", payload, %{assigns: %{user: user, client_id: client_id}} = socket)
   when user != nil do
-    msg = payload |> set_user_fields(user)
-    broadcast! socket, "video_state", msg
+    if "#{user.id}:#{client_id}" == CM.get_leader("lobby") do
+      msg = payload |> set_user_fields(user) |> Map.merge(%{client_id: socket.assigns.client_id})
+      broadcast! socket, "video_state", msg
+    end
+    {:noreply, socket}
+  end
+
+  # become leader
+  def handle_in("take_leader", _payload, %{assigns: %{user: user, client_id: client_id}} = socket)
+  when user != nil do
+    key = "#{user.id}:#{client_id}"
+    channel_state = CM.set_leader("lobby", key)
+    broadcast! socket, "channel_update", channel_state
     {:noreply, socket}
   end
 
   def handle_in(_, _, socket), do: {:noreply, socket}
 
-  # Handle out
+  def handle_info({:after_join, channel_state}, socket) do
+    broadcast! socket, "channel_update", channel_state
+    {:noreply, socket}
+  end
+
+  #
+  # Handle outgoing messages
+  #
+
+  intercept ["new_msg", "video_state"]
 
   def handle_out("new_msg", payload, socket) do
     push socket, "new_msg", payload
     {:noreply, socket}
   end
 
+  def handle_out("video_state", payload, socket) do
+    if socket.assigns.client_id != payload.client_id do
+      push socket, "video_state", payload
+    end
+    {:noreply, socket}
+  end
+
+  #
   # Helpers
+  #
 
   defp set_user_fields(msg, nil), do: msg
   defp set_user_fields(msg, user) do
