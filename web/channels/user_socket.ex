@@ -24,7 +24,8 @@ defmodule Ruff.UserSocket do
       {:ok, id} -> get_user(id)
       {:error, _} -> nil
     end
-    client_id = :crypto.strong_rand_bytes(8) |> Base.url_encode64
+    random_hash = :crypto.strong_rand_bytes(8) |> Base.url_encode64
+    client_id = "#{user && user.id}:#{random_hash}"
     socket = socket |> assign(:user, user) |> assign(:client_id, client_id)
     {:ok, socket}
   end
@@ -39,9 +40,10 @@ defmodule Ruff.UserSocket do
   #     Ruff.Endpoint.broadcast("users_socket:#{user.id}", "disconnect", %{})
   #
   # Returning `nil` makes this socket anonymous.
-  def id(socket), do: "user_sock:#{socket.assigns.user.id}"
+  def id(%{assigns: %{user: %{id: id}}}), do: "user_sock:#{id}"
+  def id(_), do: nil
 
   defp get_user(id) do
-    Ruff.Repo.get_by(Ruff.User, id: id) |> Map.take([:id, :username])
+    Ruff.Repo.get(Ruff.User, id) |> Map.take([:id, :username])
   end
 end

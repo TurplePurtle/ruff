@@ -42,7 +42,7 @@ function initChat() {
     app.users = payload.users;
   });
 
-  return {};
+  return app;
 }
 
 var chat = initChat();

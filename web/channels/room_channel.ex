@@ -1,4 +1,5 @@
 defmodule Ruff.RoomChannel do
+  require Logger
   use Phoenix.Channel
   alias Ruff.ChannelMonitor, as: CM
 
@@ -7,8 +8,14 @@ defmodule Ruff.RoomChannel do
   #
 
   def join("rooms:lobby", _message, socket) do
-    key = "#{socket.assigns.user.id}:#{socket.assigns.client_id}"
-    channel_state = CM.add_user("lobby", key, socket.assigns.user)
+    Logger.info "Client connected: #{socket.assigns.client_id}"
+    channel_state = CM.add_user("lobby", socket.assigns.client_id, socket.assigns.user)
+    channel_state =
+      if channel_state.leader == nil && socket.assigns.user != nil do
+        CM.set_leader("lobby", socket.assigns.client_id)
+      else
+        channel_state
+      end
     send self, {:after_join, channel_state}
     {:ok, socket}
   end
@@ -22,8 +29,14 @@ defmodule Ruff.RoomChannel do
   #
 
   def terminate(_reason, socket) do
-    key = "#{socket.assigns.user.id}:#{socket.assigns.client_id}"
-    channel_state = CM.remove_user("lobby", key)
+    Logger.info "Client disconnected: #{socket.assigns.client_id}"
+    channel_state = CM.remove_user("lobby", socket.assigns.client_id)
+    channel_state =
+      if channel_state.leader == socket.assigns.client_id do
+        CM.set_leader("lobby", nil)
+      else
+        channel_state
+      end
     broadcast! socket, "channel_update", channel_state
     :ok
   end
@@ -43,7 +56,7 @@ defmodule Ruff.RoomChannel do
   # video messages
   def handle_in("video_state", payload, %{assigns: %{user: user, client_id: client_id}} = socket)
   when user != nil do
-    if "#{user.id}:#{client_id}" == CM.get_leader("lobby") do
+    if client_id == CM.get_leader("lobby") do
       msg = payload |> set_user_fields(user) |> Map.merge(%{client_id: socket.assigns.client_id})
       broadcast! socket, "video_state", msg
     end
@@ -53,8 +66,7 @@ defmodule Ruff.RoomChannel do
   # become leader
   def handle_in("take_leader", _payload, %{assigns: %{user: user, client_id: client_id}} = socket)
   when user != nil do
-    key = "#{user.id}:#{client_id}"
-    channel_state = CM.set_leader("lobby", key)
+    channel_state = CM.set_leader("lobby", client_id)
     broadcast! socket, "channel_update", channel_state
     {:noreply, socket}
   end

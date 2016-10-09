@@ -13,7 +13,7 @@ defmodule Ruff.SessionController do
         |> redirect(to: "/")
       :error ->
         conn
-        |> put_flash(:info, "Wrong email or password")
+        |> put_flash(:info, "Wrong username or password")
         |> render("new.html")
     end
   end

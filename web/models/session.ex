@@ -1,8 +1,11 @@
 defmodule Ruff.Session do
-  alias Ruff.User
+  import Ecto.Query, only: [from: 2]
 
   def login(params, repo) do
-    case repo.get_by(User, username: String.downcase(params["username"])) do
+    username = String.downcase(params["username"])
+    query = from u in Ruff.User,
+      where: fragment("lower(?)", u.username) == ^username
+    case Ruff.Repo.one(query) do
       %{crypted_password: hash} = user ->
         case authenticate(params["password"], hash) do
           true -> {:ok, user}

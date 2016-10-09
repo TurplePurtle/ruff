@@ -11,8 +11,8 @@
     <div class="users-box">
       <button @click="takeLeader()">Take leader</button>
       <div>
-        <div class="users-user" v-for="(user, key) in users">
-          {{user.username}}
+        <div class="users-user" v-for="(user, key) in users" :style="!user && 'color: rgba(0,0,0,0.5)'">
+          {{user ? user.username : "Anonymous"}}
           <span class="users-user-leader" v-if="key === leader">(leader)</span>
         </div>
       </div>
