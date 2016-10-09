@@ -12,7 +12,7 @@ class VideoController {
   }
 
   static getYouTubeId(url) {
-    if (/[\w\-]{11}/.test(url)) {
+    if (/^[\w\-]{11}$/.test(url)) {
       return url;
     }
     const urlParser = document.createElement('a');
