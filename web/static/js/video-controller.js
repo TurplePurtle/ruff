@@ -12,17 +12,20 @@ class VideoController {
   }
 
   static getYouTubeId(url) {
-    const a = document.createElement('a');
-    a.href = url;
-    if (/youtube\.com$/.test(a.hostname)) {
-      const params = a.search.slice(1).split('&').reduce((params, x) => {
+    if (/[\w\-]{11}/.test(url)) {
+      return url;
+    }
+    const urlParser = document.createElement('a');
+    urlParser.href = url;
+    if (/youtube\.com$/.test(urlParser.hostname)) {
+      const params = urlParser.search.slice(1).split('&').reduce((params, x) => {
         const [name, value] = x.split('=');
         params[name] = value;
         return params;
       }, {});
       return params.v;
-    } else if (/youtu\.be$/.test(a.hostname)) {
-      return a.pathname.slice(1);
+    } else if (/youtu\.be$/.test(urlParser.hostname)) {
+      return urlParser.pathname.slice(1);
     } else {
       return '';
     }
@@ -57,12 +60,14 @@ class VideoController {
   }
 
   load(url, time) {
-    this.player.loadVideoById(VideoController.getYouTubeId(url), time);
+    const videoId = VideoController.getYouTubeId(url);
+    if (videoId) this.player.loadVideoById(videoId, time);
     return this;
   }
 
   cue(url, time) {
-    this.player.cueVideoById(VideoController.getYouTubeId(url), time);
+    const videoId = VideoController.getYouTubeId(url);
+    if (videoId) this.player.cueVideoById(videoId, time);
     return this;
   }
 

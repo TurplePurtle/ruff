@@ -1,3 +1,13 @@
 .users-box {
+  background: #fff;
   flex: 1 1 auto;
+}
+
+.users-user {
+  padding: 0.25em;
+}
+
+.users-user-leader {
+  color: rgba(0,0,0,0.5);
+  font-size: 0.75em;
 }

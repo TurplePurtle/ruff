@@ -1,5 +1,6 @@
 .chat-box {
   background-color: #fff;
+  flex: auto;
 }
 
 .chat-messages {
